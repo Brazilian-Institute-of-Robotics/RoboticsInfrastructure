@@ -151,6 +151,11 @@ install(DIRECTORY
   # LASER MAPPING LOC
   laser_mapping/models
 
+  # TESTE 01 LOC
+  teste_01/launch
+  teste_01/models
+  teste_01/worlds
+
   restaurant/models
   
   pick_place/models
