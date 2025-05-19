@@ -46,6 +46,14 @@ if [ -z "${DRI_NAME}" ]; then
     source set_dri_name.sh
 fi
 
+cd /
+
+# Executar migrações do Django
+python3 /RoboticsAcademy/manage.py migrate
+
+# Iniciar Redis em segundo plano
+redis-server &
+
 if [ $webserver == true ]; then
     runserver="python3 /RoboticsAcademy/manage.py runserver 0.0.0.0:7164"
 else
@@ -63,18 +71,31 @@ if [ $webserver == true ]; then
 fi
 
 runram="python3 RoboticsApplicationManager/manager/manager/manager.py 0.0.0.0 7163"
-root="cd /"
 
 # TEST LOGS
 if [ $log == true ]; then
     DATE_TIME=$(date +%F-%H-%M) # FORMAT year-month-date-hours-mins
     mkdir -p /root/.roboticsacademy/log/$DATE_TIME/
-    script -q -c "$root & $runserver & $runram ;" /root/.roboticsacademy/log/$DATE_TIME/manager.log
-    cp -r /root/.ros/log/* /root/.roboticsacademy/log/$DATE_TIME
+    script -q -c "$runserver & \
+                  celery -A academy worker --loglevel=info & \
+                  celery -A academy beat --loglevel=info & \
+                  $runram" \
+          /root/.roboticsacademy/log/$DATE_TIME/manager.log
+    cp -r /root/.ros/log/* /root/.roboticsacademy/log/$DATE_TIME/
 else
     if [ $debug == true ]; then
       { bash ; }
     else
-      { $root & $runserver & $runram ; }
+      if [ "$runserver" != "" ]; then
+        $runserver &
+        # $runserver > /var/log/django.log 2>&1 &
+      fi
+      
+      celery -A academy worker --loglevel=info &
+      celery -A academy beat --loglevel=info &
+      
+      # celery -A academy worker --loglevel=info > /var/log/celery-worker.log 2>&1 &
+      # celery -A academy beat --loglevel=info > /var/log/celery-beat.log 2>&1 &
+      $runram
     fi
 fi
