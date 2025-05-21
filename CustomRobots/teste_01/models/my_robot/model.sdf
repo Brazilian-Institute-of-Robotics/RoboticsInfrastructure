@@ -15,7 +15,7 @@
       <visual name='visual'>
         <geometry>
           <mesh>
-            <uri>model://pioneer2dx/meshes/chassis.dae</uri>
+            <uri>model://my_robot/meshes/chassis.dae</uri>
             <scale>0.9 0.5 0.5</scale>
             <pose>0 0 0.05 0 0 0</pose>
           </mesh>
@@ -113,12 +113,12 @@
     </joint>
 
     <include>
-      <uri>model://hokuyo</uri>
+      <uri>model://hokuyo_alter</uri>
       <pose>0.2 0 0.2 0 0 0</pose>
     </include>
 
     <joint name="hokuyo_joint" type="fixed">
-      <child>hokuyo::link</child>
+      <child>hokuyo_alter::link</child>
       <parent>chassis</parent>
     </joint>
 
@@ -134,7 +134,7 @@
       <torque>20</torque>
       <commandTopic>/cmd_vel</commandTopic>
       <!-- topic name published in the cpp file -->
-      <odometryTopic>my_robot/odom</odometryTopic>
+      <odometryTopic>odom</odometryTopic>
       <odometryFrame>odom</odometryFrame>
       <odometryRate>20.0</odometryRate>
 
@@ -143,6 +143,5 @@
       <publishWheelTF>true</publishWheelTF>
       <publishWheelJointState>true</publishWheelJointState>
     </plugin>
-
   </model>
 </sdf>
