@@ -1,0 +1,30 @@
+<?xml version="1.0" ?>
+<sdf version="1.6">
+  <world name="empty">
+    
+    <!-- Configuração da iluminação ambiente -->
+    <scene>
+      <ambient>0.4 0.4 0.4 1</ambient>
+      <background>0.7 0.7 0.7 1</background>
+      <shadows>true</shadows>
+    </scene>
+    
+    <!-- Física básica -->
+    <physics type="ode">
+      <max_step_size>0.001</max_step_size>
+      <real_time_factor>1</real_time_factor>
+      <real_time_update_rate>1000</real_time_update_rate>
+    </physics>
+    
+    <!-- Luz solar padrão -->
+    <include>
+      <uri>model://sun</uri>
+    </include>
+    
+    <!-- Chão plano -->
+    <include>
+      <uri>model://ground_plane</uri>
+    </include>
+    
+  </world>
+</sdf>
