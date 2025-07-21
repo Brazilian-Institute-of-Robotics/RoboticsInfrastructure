@@ -242,6 +242,13 @@ ALTER TABLE ONLY public.universes
 
 CREATE INDEX exercises_universe_name_459df99a_like ON public.universes USING btree (name varchar_pattern_ops);
 
+DO $$
+BEGIN
+  PERFORM setval('public.exercises_universe_id_seq', COALESCE((SELECT MAX(id) FROM public.universes), 1) + 1);
+  PERFORM setval('public.worlds_id_seq', COALESCE((SELECT MAX(id) FROM public.worlds), 1) + 1);
+  PERFORM setval('public.robots_id_seq', COALESCE((SELECT MAX(id) FROM public.robots), 1) + 1);
+END $$;
+
 --
 -- PostgreSQL database dump complete
 --
