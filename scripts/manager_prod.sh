@@ -46,6 +46,11 @@ if [ -z "${DRI_NAME}" ]; then
     source set_dri_name.sh
 fi
 
+source /opt/ros/humble/setup.bash
+
+cd /home/ws
+source install/setup.bash
+
 cd /
 
 runram="python3 RoboticsApplicationManager/manager/manager/manager.py 0.0.0.0 7163"
